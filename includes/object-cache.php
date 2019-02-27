@@ -465,6 +465,14 @@ class WP_Object_Cache
 
                 $options = array();
 
+                // Use PHPiRedis as an accelerator for PRedis if it is present.
+                if (defined('WP_REDIS_HIREDIS')) {
+                    $options[ 'connections' ] = array(
+                        'tcp'  => 'Predis\Connection\PhpiredisStreamConnection',
+                        'unix' => 'Predis\Connection\PhpiredisSocketConnection'
+                    );
+                }
+
                 if (defined('WP_REDIS_SHARDS')) {
                     $parameters = WP_REDIS_SHARDS;
                 } elseif (defined('WP_REDIS_SENTINEL')) {
